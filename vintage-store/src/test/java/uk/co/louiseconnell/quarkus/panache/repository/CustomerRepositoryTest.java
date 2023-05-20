@@ -19,6 +19,13 @@ public class CustomerRepositoryTest {
   @Test
   @TestTransaction
   public void shouldCreateAndFindACustomer() {
+
+    // Check that the number of customers is the same as the number of customers in the list
+    long count = repository.count();
+    int listAll = repository.listAll().size();
+    assertEquals(count, listAll);
+
+    // Create a customer
     Customer customer = new Customer("first name", "last name", "email" );
 
     repository.persist(customer);

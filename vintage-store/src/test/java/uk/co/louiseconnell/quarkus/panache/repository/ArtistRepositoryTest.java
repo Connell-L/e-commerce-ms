@@ -32,10 +32,18 @@ public class ArtistRepositoryTest {
 
   @Test
   public void shouldUpdateAnArtist() throws SQLException {
+
+    long count = repository.count();
+    int listAll = repository.listAll().size();
+    assertEquals(count, listAll);
+
     // Create an artist
     Artist artist = new Artist("name", "bio");
     repository.persist(artist);
+
+    // Check the artist has been created
     assertNotNull(artist.getId());
+    assertEquals(count + 1, repository.count());
 
     // Update the artist
     artist.setName("new name");
@@ -44,8 +52,12 @@ public class ArtistRepositoryTest {
 
     // Retrieve the updated artist
     Artist updatedArtist = repository.findById(artist.getId());
-    assertEquals("new name", updatedArtist.getName());
-    assertEquals("new bio", updatedArtist.getBio());
+
+    assertAll(
+        () -> assertNotNull(artist.getId()),
+        () -> assertEquals("new name", artist.getName()),
+        () -> assertEquals("new bio", artist.getBio())
+    );
   }
 }
 
